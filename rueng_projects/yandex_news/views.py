@@ -184,7 +184,7 @@ def show_next_article(request, view_option, article_id):
     elif view_option == 'read-only':
         article_title_obj = YandexArticletitle.objects.filter(article_id__gt = article_id, is_read = 1).order_by('article_id')[0]
 
-    redirect_url = "/yandex_article_list/"+ view_option + '/'+ str(article_title_obj.article_id)
+    redirect_url = "/yandex/yandex_article_list/"+ view_option + '/'+ str(article_title_obj.article_id)
 
     return JsonResponse({"redirect_url": redirect_url})
 
@@ -199,6 +199,6 @@ def show_previous_article(request, view_option, article_id):
     elif view_option == 'read-only':
         article_title_obj = YandexArticletitle.objects.filter(article_id__lt = article_id, is_read = 1).order_by('-article_id')[0]
 
-    redirect_url = "/yandex_article_list/"+ view_option + '/'+ str(article_title_obj.article_id)
+    redirect_url = "/yandex/yandex_article_list/"+ view_option + '/'+ str(article_title_obj.article_id)
 
     return JsonResponse({"redirect_url": redirect_url})

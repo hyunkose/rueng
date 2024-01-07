@@ -7,9 +7,9 @@ function previous_article_button(){
 
 
     if (website_type == 'yesasia_article_list'){
-        request_url = '/yesasia_article_previous/' + view_option + '/' + article_id;
+        request_url = '/yesasia/yesasia_article_previous/' + view_option + '/' + article_id;
     } else if (website_type == 'yandex_article_list'){
-        request_url = '/yandex_article_previous/' + view_option + '/' + article_id;
+        request_url = '/yandex/yandex_article_previous/' + view_option + '/' + article_id;
     }
 
     const response = fetch(request_url, {
@@ -32,9 +32,9 @@ function next_article_button(){
     let request_url;
 
     if (website_type == 'yesasia_article_list'){
-        request_url = '/yesasia_article_next/' + view_option + '/' + article_id;
+        request_url = '/yesasia/yesasia_article_next/' + view_option + '/' + article_id;
     } else if (website_type == 'yandex_article_list'){
-        request_url = '/yandex_article_next/' +  view_option + '/' + article_id;
+        request_url = '/yandex/yandex_article_next/' +  view_option + '/' + article_id;
     }
 
     const response = fetch(request_url, {
