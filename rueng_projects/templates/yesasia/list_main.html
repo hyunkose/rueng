@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-5.3.2-dist/css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'css/article_list.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Philosopher&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{% static 'img/favicon_img.png' %}">
+    <script type="text/javascript" src="{% static 'js/article_list_view_option.js' %}" defer> </script>
+    <title>Rueng</title>
+</head>
+<body>
+    <div id ="yesasia_article" class="big-bg">
+        <header class="page-header wrapper">
+            <h1><a href="{% url 'rueng_home'%}" class="logo">Rueng</a></h1>
+            <nav>
+                {% include 'navbar.html' %}
+            </nav>
+        </header>
+        <!--page header title-->
+        <div class="page-title wrapper">YesAsia!</div>
+    </div>
+    <!--main content-->
+    <div class="view-option-menu">
+        <form action="">
+            <select name="options" id="view-option-dropdown" onchange="view_option_select(event)">
+                {% for option_tag, option_text in view_options %}
+                    <option value={{option_tag}}>{{option_text}}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    <div class="main-content-wrapper">{% include 'list_table.html'%}</div>
+    <!-- footer-->
+    <footer>
+        <div class="wrapper">
+            <p><small>&copy; 2023 Rueng</small></p>
+        </div>
+    </footer>
+</body>
+</html>

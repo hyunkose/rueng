@@ -1,0 +1,18 @@
+{% load static %}
+<div class="dictionary-header">
+    <img src="{% static 'img/favicon_img.png' %}" alt="rueng-dictionary-img">
+    <span class="title-main">Rueng Dictionary</span>
+    <span class="title-small">powered by wiktionary</span>
+    <img src="{% static 'img/x-circle.png' %}" alt="close-icon" class="close-icon" onclick="dictionary_icon_event()">
+</div>
+<div class="dictionary-search">
+    <input type="text" name="search_word" class="search_box">
+    <button id="search-button" onclick="button_click_event()">search</button>
+    <button id="save-button" onclick="save_word_event()">save word</button>
+    <div class="word-saved-checked" style="display: none;">
+        <img class="vocab-checked-img" src="{% static 'img/check2-square.png' %}" alt="word-saved-success-mark">
+        <span class="vocab-checked-label">saved!</span>
+    </div>
+</div>
+
+<div class="dictionary-content"></div>

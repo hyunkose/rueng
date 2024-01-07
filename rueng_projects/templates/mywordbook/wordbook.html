@@ -1,0 +1,75 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rueng</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap-5.3.2-dist/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/wordbook.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Philosopher&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{% static 'img/favicon_img.png' %}">
+    <script type="text/javascript" src="{% static 'js/wordbook_click_event.js' %}" defer> </script>
+    <script type="text/javascript" src="{% static 'js/wordbook_delete_event.js' %}" defer> </script>
+</head>
+<body>
+    <!--header-->
+    <div id ="wordbook_header" class="big-bg">
+        <header class="page-header wrapper">
+            <h1><a href="{% url 'rueng_home' %}" class="logo">Rueng</a></h1>
+            <nav>
+                {% include 'navbar.html' %}
+            </nav>
+        </header>
+        <div class="wrapper">
+            <h2 class="page-title">My Word Book</h2>
+        </div>
+    </div>
+
+    <!--main content -->
+    <div class="word-cards-wrapper">
+        <div class="clicked-word">
+            
+        </div>
+        <div class="word-container">
+            {% include 'mywordbook/wordbook_content.html' %}
+        </div>
+    </div>
+
+    <!--pagination buttons-->
+    <div class="paginator-button-wrapper" aria-label="article-list-nav">
+        <ul class="pagination">
+            {% if page_obj_list.has_previous %}
+                <li class="page-item previous-button"><a class="page-link" href="?page={{page_obj_list.previous_page_number}}"><span>Previous</span></a></li>
+            {% endif %}
+            {% for page in paginator.page_range%}
+                {% if page >= page_obj_list.number|add:-4 and page <= page_obj_list.number|add:4 %}
+                    {% if page == page_obj_list.number %}
+                        <li class="page-item active pagination-button-list">
+                            <a class="page-link" href="?page={{page}}"><span class="sr-only">{{page}}</span></a>
+                        </li>                    
+                    {% else %}
+                        <li class="page-item pagination-button-list">
+                            <a class="page-link" href="?page={{page}}"><span>{{page}}</span></a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            {% if page_obj_list.has_next %}
+            <li class="page-item next-button"><a class="page-link" href="?page={{page_obj_list.next_page_number}}"><span>Next</span></a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+
+    <!--footer-->
+    <footer>
+        <div class="wrapper">
+            <p><small>&copy; 2023 Rueng</small></p>
+        </div>
+    </footer>
+</body>
+</html>

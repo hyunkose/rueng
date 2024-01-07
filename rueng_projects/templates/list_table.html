@@ -1,0 +1,53 @@
+{% load static %}
+
+<div class="list-table-wrapper">
+    <table class="article-list-table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">title</th>
+                <th scope="col">status</th>
+                <th scope="col">update date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for page_obj in page_obj_list%}
+                <tr>
+                    <td>{{ page_obj_list.start_index|add:forloop.counter0 }}</td>
+                    <td class="article-title-link"><a href="{{page_obj.article_id}}" class="article_link">{{page_obj.title}}</a></td>
+                    <td>
+                        {% if page_obj.is_read == 0 %}
+                            <img src="{% static 'img/pencil-fill.png'%}" alt="status img">
+                        {% elif page_obj.is_read == 1 %}
+                            <img src="{% static 'img/check2-square.png'%}" alt="status img">
+                        {% endif %}
+                    </td>
+                    <td>{{page_obj.update_date}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="paginator-button-wrapper" aria-label="article-list-nav">
+    <ul class="pagination">
+        {% if page_obj_list.has_previous %}
+            <li class="page-item previous-button"><a class="page-link" href="?page={{page_obj_list.previous_page_number}}"><span>Previous</span></a></li>
+        {% endif %}
+        {% for page in paginator.page_range%}
+            {% if page >= page_obj_list.number|add:-4 and page <= page_obj_list.number|add:4 %}
+                {% if page == page_obj_list.number %}
+                    <li class="page-item active pagination-button-list">
+                        <a class="page-link" href="?page={{page}}"><span class="sr-only">{{page}}</span></a>
+                    </li>                    
+                {% else %}
+                    <li class="page-item pagination-button-list">
+                        <a class="page-link" href="?page={{page}}"><span>{{page}}</span></a>
+                    </li>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        {% if page_obj_list.has_next %}
+        <li class="page-item next-button"><a class="page-link" href="?page={{page_obj_list.next_page_number}}"><span>Next</span></a></li>
+        {% endif %}
+    </ul>
+</div>

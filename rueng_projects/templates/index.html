@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rueng</title>
+    <link rel="stylesheet" href="../../static/css/bootstrap-5.3.2-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../../static/css/index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Philosopher&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../../static/img/favicon_img.png">
+</head>
+<body>
+    <div id ="home" class="big-bg">
+        <header class="page-header wrapper">
+            <h1><a href="{% url 'rueng_home' %}" class="logo">Rueng</a></h1>
+            <nav>
+                {% include 'navbar.html' %}
+            </nav>
+        </header>
+        <div class="home-content wrapper">
+            <h2 class="page-title">Learn Russian by English!</h2>
+            <p>Read various articles in Russian with our fast, accurate Russian dictionary app and boost your Russian skills.</p>
+            <a href="random_reading/" class="button">Start</a>
+        </div>
+    </div>
+</body>
+</html>

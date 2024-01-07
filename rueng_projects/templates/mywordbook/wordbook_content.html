@@ -1,0 +1,7 @@
+{% for page_obj in page_obj_list%}
+<div class="word {{page_obj.canonical_id}}" onclick="wordcard_click_event(this, event)">
+    <p class="word-title">{{ page_obj.canonical_form }}</p>
+    <p class="word-meaning">{{ page_obj.word_meaning }}</p>
+    <button class="delete-word" onclick="delete_word(event)"><span>Delete from Wordbook</span></button>
+</div>
+{% endfor %}

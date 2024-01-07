@@ -1,0 +1,63 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rueng - Yes Asia</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap-5.3.2-dist/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/article_main.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Philosopher&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{% static 'img/favicon_img.png' %}">
+    <script type="text/javascript" src="{% static 'js/dictionary_word_click_evnt.js' %}" defer> </script>
+    <script type="text/javascript" src="{% static 'js/dictionary_toggle.js' %}" defer> </script>
+    <script type="text/javascript" src="{% static 'js/save_article_event.js' %}" defer> </script>
+    <script type="text/javascript" src="{% static 'js/save_word_event.js' %}" defer> </script>
+    <script type="text/javascript" src="{% static 'js/previous_next_button_evnt.js' %}" defer> </script>
+</head>
+<body>
+    <!--header-->
+    <div id ="yesasia_article" class="big-bg">
+        <header class="page-header wrapper">
+            <h1><a href="{% url 'rueng_home' %}" class="logo">Rueng</a></h1>
+            <nav>
+                {% include 'navbar.html' %}
+            </nav>
+        </header>
+        <div class="wrapper">
+            <h2 class="page-title">{{ article_title_original }}</h2>
+        </div>
+    </div>
+    <!--main content-->
+    <div class="main-content-wrapper">
+        {% if is_previous_page %}
+            <div class="previous_button">
+                <button>
+                        <img src="{% static 'img/arrow-left-circle.png' %}" alt="previous_button" onclick="previous_article_button()">
+                </button>
+            </div>
+        {% endif %}
+
+        <article>{% include 'article_content.html'%}</article>
+        
+        {% if is_next_page %}
+            <div class="next_button">
+                <button>
+                    <img src="{% static 'img/arrow-right-circle.png' %}" alt="next_button" onclick="next_article_button()">
+                </button>
+            </div>
+        {% endif %}
+        <!-- dictionary section -->
+        <aside style="display: none;">{% include 'dictionary.html'%}</aside>
+    </div>
+    <!--footer-->
+    <footer>
+        <div class="wrapper">
+            <p><small>&copy; 2023 Rueng</small></p>
+        </div>
+    </footer>
+</body>
+</html>

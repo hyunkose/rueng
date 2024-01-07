@@ -1,0 +1,299 @@
+@charset "UTF-8";
+
+html{
+    font-size: 100%;
+}
+
+body{
+    font-family: "나눔고딕", NanumGothic, "맑은고딕", MalgunGothic;
+    line-height: 1.7px;
+    color: #432;
+}
+
+#home{
+    background-image: url(../img/background_img.jpg);
+    min-height: 100vh;
+    padding-top: 30px;
+}
+#home .page-title{
+    text-transform: none;
+}
+
+.big-bg{
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+}
+
+.page-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: Philosopher;
+}
+
+.wrapper{
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 4%;    
+}
+
+
+.logo{
+    width: 210px;
+    margin-top: 14px;
+}
+
+.main-nav{
+    display: flex;
+    list-style: none;
+    margin-top: 30px;
+}
+
+.main-nav li {
+    margin-inline: 15px;
+}
+
+.page-header a{
+    color: #0bd;
+    text-decoration: none;
+}
+
+.home-content{
+    text-align: center;
+    margin-top: 10%;
+}
+
+.home-content p{
+    font-size: 1.125rem;
+    margin: 20px 0 90px 0;
+    line-height: 30px;
+}
+
+.home-content a{
+    text-decoration: none;
+}
+
+.page-title{
+    font-size: 5rem;
+    font-family: 'Philosopher', sans-serif;
+    text-transform: uppercase;
+    font-weight: normal;
+}
+
+.button{
+    font-size: 1.1rem;
+    background: #0bd;
+    color: #fff;
+    border-radius: 5px;
+    padding: 18px 32px;
+    margin-top: 10%;
+}
+
+.button:hover{
+    background: #0090aa;
+}
+
+#yesasia_article{
+    background-image: url(../img/background_img.jpg);
+    opacity: 0.8;
+    background-position: center 60%;
+    height: 270px;
+    margin-bottom: 40px;
+}
+
+#yesasia_article .wrapper{
+    padding: 30px;
+}
+
+#yesasia_article .page-title{
+    text-align: center;
+    font-size: 30px;
+    font-family: Philosopher;
+    font-weight: bold;
+    word-break: keep-all;
+}
+
+footer{
+    background: #e8e6e9;
+    text-align: center;
+    padding: 26px;
+}
+
+footer p{
+    color: #000;
+    font-size: 0.875rem;
+    font-weight: bold;
+}
+
+.main-content-wrapper{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
+    height: 100vh;
+    margin: 50px 200px;
+}
+
+article{
+    height: 100%;
+    width: 60%;
+    padding: 20px;
+    text-align: justify;
+    margin-right: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+article span.body-text{
+    word-break: keep-all;
+    line-height: 25px;
+    margin-bottom: 1rem;
+    font-family: Philosopher;
+}
+
+article span.body-text:hover{
+    background-color: #0090aa;
+    color: white;
+    font-weight: bold;
+    opacity: 0.6;
+    border-radius: 10px;
+    padding: 3px;
+}
+article span.title-text{
+    word-break: keep-all;
+    line-height: 35px;
+    margin-bottom: 1rem;
+    font-family: Philosopher;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+article span.title-text:hover{
+    background-color: #0090aa;
+    color: white;
+    font-weight: bold;
+    opacity: 0.6;
+    font-size: 20px;
+    border-radius: 10px;
+    padding: 3px;
+}
+
+div.article-title-wrapper{
+    margin-bottom: 25px;
+}
+
+aside{
+    height: 100%;
+    width: 40%;
+    padding: 20px;
+    text-align: left;
+    justify-content: center;
+    border: solid 1px #c1c1c1;
+    border-radius: 10px;
+    display: block;
+}
+
+.dictionary-header{
+    display: flex;
+    border-bottom:  #c1c1c1 solid 3px;
+}
+
+
+aside img{
+    width: 8%;
+    height: 8%;
+    margin: 10px;
+}
+
+aside a{
+    margin: 15px 0;
+    font-family: Philosopher;
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 25px;
+    margin-left: 10px;
+    text-decoration: none;
+    color: black;
+
+}
+
+div.dictionary-search{
+    margin: 30px 0;
+    height: 30px;
+}
+
+input{
+    height: 30px;
+    border-radius: 5px;
+    border-width: 1.5px;
+    border-color: black;
+    font-family: Philosopher;
+    font-size: 15px;
+    font-weight: bold;
+    vertical-align: bottom;
+
+}
+
+#search-button, #save-button{
+    height: 30px;
+    border-radius: 5px;
+    border-width: 1.5px;
+    font-family: Philosopher;
+    vertical-align: bottom;
+}
+
+div.dictionary-content{
+    padding: 20px;
+    height: 80%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+p.original-word{
+    font-size: 30px;
+    font-family: Philosopher;
+    margin: 50px 0; 
+}
+
+p.word-meaning-title, p.word-table-title, p.pos-title{
+    font-size: 18px;
+    font-family: Philosopher;
+    margin-bottom: 20px;
+}
+
+p.word-meaning, p.pos{
+    font-size: 18px;
+    font-family: Philosopher;
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+
+aside table{
+    font-size: 12px;
+    font-family: Philosopher;
+    border-collapse: collapse;
+    padding: 20px;
+    width: 80%;
+    max-width: 100%;
+    justify-content: left;
+}
+
+tr, th, td{
+    height: 20px;
+    width: 50px;
+    max-width: 90px;
+    padding: 10px;
+    border: 1px solid gray;
+    line-height: 10px;
+}
+
+.list-table-wrapper{
+    display: inline-block;
+    align-items: center;
+}
+
+table.article-list-table{
+    margin: 0 auto;
+   align-self: center;
+}

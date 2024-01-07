@@ -1,0 +1,25 @@
+{% load static %}
+<div class="article-title-wrapper">
+    {% for title in article_title_list %}
+        <span class="title-text" onclick="word_click_event(this)">{{ title }}</span>
+    {% endfor %}
+        <button class="dictionary-icon">
+            <img src="{% static 'img/ico_book.png' %}" alt="dictionary-icon" onclick="dictionary_icon_event()">
+        </button>
+</div>
+{% for article_body in article_body_list %}
+<div class="article-body-wrapper">
+    {% for article in article_body%}
+        <span class="body-text" onclick="word_click_event(this)">{{article}}</span>
+    {% endfor%}
+</div>
+{% endfor %}
+<div class="article-save-wrapper">
+    {% if is_read == 0 %}
+        <button class="article-save-button" onclick="save_article()">done reading?</button>
+        <img class="read-checked" src="{% static 'img/check2-square.png' %}" alt="read-checked-img" style="display: none;">
+    {% elif is_read == 1 %}
+        <button class="article-save-button" onclick="save_article()">finished reading!</button>
+        <img class="read-checked" src="{% static 'img/check2-square.png' %}" alt="read-checked-img" style="display: inline;">
+    {% endif %}
+</div>

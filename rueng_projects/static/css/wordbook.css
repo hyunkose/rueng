@@ -1,0 +1,272 @@
+@charset "UTF-8";
+
+/* basic settings & navbar */
+html{
+    font-size: 100%;
+}
+
+body{
+    font-family: "나눔고딕", NanumGothic, "맑은고딕", MalgunGothic;
+    line-height: 1.7px;
+    color: #432;
+}
+/* header section */
+#home{
+    background-image: url(../img/background_img.jpg);
+    min-height: 100vh;
+}
+#home .page-title{
+    text-transform: none;
+}
+
+.big-bg{
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+}
+
+.page-header{
+    display: flex;
+    margin: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wrapper{
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 4%;    
+}
+
+
+.logo{
+    width: 210px;
+    margin-top: 14px;
+}
+
+.main-nav{
+    display: flex;
+    list-style: none;
+    margin-top: 30px;
+}
+
+.main-nav li {
+    margin-inline: 15px;
+}
+
+.page-header a{
+    color: #0bd;
+    text-decoration: none;
+}
+
+.home-content{
+    text-align: center;
+    margin-top: 10%;
+}
+
+.home-content p{
+    font-size: 1.125rem;
+    margin: 20px 0 90px 0;
+}
+
+.home-content a{
+    text-decoration: none;
+}
+
+.page-title{
+    font-size: 5rem;
+    font-family: 'Philosopher', sans-serif;
+    text-transform: uppercase;
+    font-weight: normal;
+}
+
+.button{
+    font-size: 1.1rem;
+    background: #0bd;
+    color: #fff;
+    border-radius: 5px;
+    padding: 18px 32px;
+    margin-top: 10%;
+}
+
+.button:hover{
+    background: #0090aa;
+}
+
+#wordbook_header{
+    background-image: url(../img/background_img.jpg);
+    opacity: 0.8;
+    background-position: center 60%;
+    height: 270px;
+    margin-bottom: 40px;
+}
+
+#wordbook_header .wrapper{
+    padding: 30px;
+    text-align: center;
+    font-family: Philosopher;
+}
+
+#wordbook_header .page-title{
+    text-align: center;
+    font-size: 30px;
+    font-family: Philosopher;
+    font-weight: bold;
+    word-break: keep-all;
+}
+
+footer{
+    background: #e8e6e9;
+    text-align: center;
+    padding: 26px;
+}
+
+footer p{
+    color: #000;
+    font-size: 0.875rem;
+    font-weight: bold;
+}
+
+
+/* wordbook main content */
+.word-cards-wrapper{
+    display: flex;
+}
+
+.close-button-wrapper{
+    display: flex;
+    justify-content: end;
+}
+
+.close-button{
+    border: none;
+    background-color: white;
+}
+.clicked-word{
+    display: hidden;
+    margin: 5px auto;
+    margin-right: 3px;
+    border: white;
+    border-radius: 10px;
+    padding: 15px;
+    word-wrap: break-word;
+}
+
+p.word-meaning-title, p.word-table-title, p.pos-title{
+    font-size: 18px;
+    font-family: Philosopher;
+    margin: 30px 0;
+}
+
+.word-table{
+    font-size: 12px;
+    font-family: Philosopher;
+    border-collapse: collapse;
+    padding: 20px;
+    width: 100%;
+    justify-content: left;
+    border: black 1px solid;
+    padding: 10px;
+    overflow: scroll;
+}
+
+tr, th, td{
+    height: 20px;
+    width: 50px;
+    padding: 10px;
+    border: 1px solid gray;
+    line-height: 10px;
+}
+
+p.original-word{
+    font-size: 30px;
+    font-family: Philosopher;
+    margin: 50px 0; 
+}
+
+.word-container{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); 
+    grid-template-rows: repeat(auto-fit, 1fr);
+    margin: 0 auto;
+    margin-left: 3px;
+    overflow: auto;
+}
+
+.word{
+    display: flex;
+    flex-direction: column;
+
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    border: gray solid 1px;
+    border-radius: 8px;
+    margin: 5px;
+    height: 180px;
+    width: 200px;
+    word-wrap: break-word;
+    cursor: pointer;
+}
+
+.word:hover{
+    background-color: #e8e6e9;
+}
+
+.delete-word{
+    margin-top: 18px;
+    padding: 10px;
+    border: black solid 1px;
+    border-radius: 10px;
+}
+
+.delete-word span{
+    font-weight: bold;
+    font-family: Philosopher;
+    font-size: 12px;
+}
+
+.delete-word:hover{
+    background-color: #000;
+    color: white;
+}
+
+
+.clicked{
+    background-color: #e8e6e9;
+}
+
+
+.word-title{
+    font-weight: bold;
+    font-family: Philosopher;
+    font-size: 20px;
+}
+
+.word-meaning{
+    font-family: Philosopher;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+
+/* paginator buttons */
+.paginator-button-wrapper{
+    display: flex;
+    height: 50px;
+    margin: 30px;
+}
+
+.pagination{
+    margin: 0 auto;
+    height: 100%;
+}
+
+.page-item, .page-link{
+    height: 100%;
+}
+
+.page-link{
+    display: inline-flex;
+    align-items: center;
+}
