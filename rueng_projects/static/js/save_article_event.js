@@ -50,7 +50,7 @@ function save_article(){
                         // 저장 결과에 따른 boolean 값 받기
                         save_result = data['save_result'];
 
-                        if (save_result === 'success'){
+                        if (save_result === 'failure'){
                             checked_img.style.display = 'none';
                             article_save_button.innerText = 'done reading?';
                         };

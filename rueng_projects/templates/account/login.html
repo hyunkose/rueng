@@ -1,0 +1,40 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rueng</title>
+    <link rel="stylesheet" href="../../static/css/bootstrap-5.3.2-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../../static/css/index.css">
+    <link rel="stylesheet" href="../../static/css/login.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Philosopher&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../../static/img/favicon_img.png">
+    <script type="text/javascript" src="{% static 'js/authentication.js' %}" defer> </script>
+</head>
+<body>
+    <div id ="home" class="big-bg">
+        <header class="page-header wrapper">
+            <h1><a href="{% url 'rueng_home' %}" class="logo">Rueng</a></h1>
+            <nav>
+                {% include 'navbar.html' %}
+            </nav>
+        </header>
+            <div class="login-content">
+                <h2>Login</h2>
+                {% csrf_token %}
+                <input type="text" name="user-id" placeholder="ID" class="userid-input-box">
+                <input type="password" name="user-password" placeholder="Password" class="user-password-input-box">
+                <button type="button" class="submit-button" onclick="login_submit()">Login</button>
+                
+                <div class="signup-wrapper">
+                    <p>Don't have an account yet?</p>
+                    <button type="button" class="signup-button" onclick="move_to_signup_page()">Signup</button>
+                </div>
+            </div>
+    </div>
+</body>
+</html>

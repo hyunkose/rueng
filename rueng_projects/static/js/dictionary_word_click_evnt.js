@@ -1,10 +1,10 @@
 const dictionary_html = function (data){
     let html_raw_list = []
-    
-    for (let d of data){
 
+    for (let d of data){
+    
         pos = d['pos']
-        
+
         if (pos == 'noun'){
             let html_raw = `
             <p class="original-word">${d['nominative_singular']}</p>
@@ -155,7 +155,7 @@ const dictionary_html = function (data){
                         <tr>
                             <th scope="row">masculine</th>
                             <td>${d['masculine_past_singular']}</td>
-                            <td rowspan=3>${d['masculine_past_plural']}</td>
+                            <td rowspan=3>${d['neuter_past_plural']}</td>
                         </tr>
                         <tr>
                             <th scope="row">feminine</th>
@@ -171,7 +171,7 @@ const dictionary_html = function (data){
                 `;
             html_raw_list.push(html_raw);
         }
-        else if (pos == 'adj'){
+        else if (pos == 'adjective'){
             let html_raw =`
                 <p class="original-word">${d['masculine_nominative']}</p>
         
@@ -224,7 +224,7 @@ const dictionary_html = function (data){
                         <tr>
                             <td style="font-weight: bold;">Inanimate</td>
                             <td>${d['masculine_nominative']}</td>
-                            <td>${d['accusative_inanimate_masculine']}</td>
+                            <td>${d['nominative_plural']}</td>
                         </tr>
                         <tr>
                             <th scope="row" colspan="2">Instrumental</th>
@@ -249,10 +249,24 @@ const dictionary_html = function (data){
         
                     </tbody>
                 </table>
-            `;
+            `
+            ;
             html_raw_list.push(html_raw);
 
         }
+        else if(pos == 'etc'){
+            let html_raw = `
+            <p class="original-word">${d['main_form']}</p>
+
+            <p class="word-meaning-title">1. meaning</p>
+            <p class="word-meaning">${d['meaning']}</p>
+
+            <p class="pos-title">2. Part of Speech</p>
+            <p class="pos">${d['pos']}</p>`;
+
+            html_raw_list.push(html_raw);
+        }
+
         else if(pos == 'no_result'){
             let html_raw =`<p class="no-result-msg">No result</p>`;
             html_raw_list.push(html_raw);

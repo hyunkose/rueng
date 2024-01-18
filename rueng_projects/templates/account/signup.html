@@ -1,0 +1,37 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rueng</title>
+    <link rel="stylesheet" href="../../static/css/bootstrap-5.3.2-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../../static/css/index.css">
+    <link rel="stylesheet" href="../../static/css/signup.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Philosopher&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../../static/img/favicon_img.png">
+    <script type="text/javascript" src="{% static 'js/authentication.js' %}" defer> </script>
+</head>
+<body>
+    <div id ="home" class="big-bg">
+        <header class="page-header wrapper">
+            <h1><a href="{% url 'rueng_home' %}" class="logo">Rueng</a></h1>
+            <nav>
+                {% include 'navbar.html' %}
+            </nav>
+        </header>
+            <div class="signup-content">
+                <h2>Signup</h2>
+                {% csrf_token %}
+                <input type="text" name="user-nickname" placeholder="Nickname" class="nickname-input-box">
+                <input type="text" name="user-id" placeholder="ID" class="id-input-box">
+                <input type="password" name="user-password" placeholder="Password" class="password1-input-box">
+                <input type="password" name="user-password-confirm" placeholder="Password Confirm" class="password2-input-box">
+                <button type="button" class="submit-button" onclick="signup_submit()">Submit</button>
+            </div>
+    </div>
+</body>
+</html>

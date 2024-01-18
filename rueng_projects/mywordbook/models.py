@@ -24,12 +24,28 @@ class WordDeclension(models.Model):
         managed = False
         db_table = 'word_declension'
 
-class SavedVocab(models.Model):
-    vocab_id = models.AutoField(primary_key=True, blank=False, null=False)
-    canonical_form = models.TextField(blank=True, null=True)
-    canonical_id = models.ForeignKey('WordCanonical', models.CASCADE, db_column='canonical_id',blank=True, null=True)
-    saved_date = models.TextField(blank=True, null=True)
+class AuthUser(models.Model):
+    password = models.CharField(max_length=128)
+    last_login = models.DateTimeField(blank=True, null=True)
+    is_superuser = models.BooleanField()
+    username = models.CharField(unique=True, max_length=150)
+    last_name = models.CharField(max_length=150)
+    email = models.CharField(max_length=254)
+    is_staff = models.BooleanField()
+    is_active = models.BooleanField()
+    date_joined = models.DateTimeField()
+    first_name = models.CharField(max_length=150)
+    nickname = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'saved_vocab'
+        db_table = 'auth_user'
+    
+class UserSavedWord(models.Model):
+    pk_column = models.AutoField(primary_key=True)
+    user_id = models.ForeignKey(AuthUser, db_column="user_id", on_delete=models.CASCADE)
+    canonical_id = models.ForeignKey('WordCanonical', db_column="canonical_id", on_delete=models.CASCADE)
+
+    class Meta:
+        managed = False
+        db_table = 'user_saved_word'

@@ -270,3 +270,31 @@ p.original-word{
     display: inline-flex;
     align-items: center;
 }
+
+/* navbar styles */
+.main-nav{
+    display: flex;
+    list-style: none;
+    margin-top: 15px;
+}
+
+.main-nav li {
+    margin-inline: 20px;
+    align-items: center;
+}
+
+.user-info-wrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+img.user-icon {
+    margin: 10px 5px;
+}
+
+.user-info-wrapper span{
+    padding: 18px 5px;
+}

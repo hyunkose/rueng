@@ -1,5 +1,17 @@
+{% load static %}
+
+{% if user.is_authenticated %}
+<div class="user-info-wrapper">
+    <img src="{% static 'img/person.png' %}" alt="user-icon" class="user-icon">
+    <span>Welcome {{user.first_name}}!</span>
+</div>
+{% endif %}
 <ul class="main-nav">
     <li><a href="{% url 'yesasia_article_list' 'view-all' %}">Yes Asia</a></li>
     <li><a href="{% url 'yandex_article_list' 'view-all' %}">Yandex News</a></li>
     <li><a href="{% url 'mywordbook_main' %}">My Wordbook</a></li>
+    
+    {% if user.is_authenticated %}
+    <li><a href="{% url 'account:logout' %}">Logout</a></li>
+    {% endif %}
 </ul>

@@ -1,0 +1,31 @@
+[처음 git 설치 후 설정]
+git config --global username "사용자명"
+git config --global email "가입 이메일 주소"
+git config --list 
+
+[git 원격 저장소 등록]
+git init
+git remote add origin 리포지토리URL
+
+[파일 commit / push]
+git init
+git add .
+git status
+git commit -am "commit 메시지"
+git push -u origin main
+
+
+
+[에러관련 정리]
+
+1) git init 실행 이후에 .git 폴더가 안 보일 때 => 파일 [보기] 메뉴에서 숨김 폴더 보이기로 설정
+
+2) 상위 폴더와 하위 폴더 모두에 .git 폴더가 있는 경우 에러 => 하위 폴더에 .git 폴더 제거, 이후 다시 git init 실행
+commit 까지 모두 진행하고,
+
+3) 아래와 같은 오류가 났을 때
+
+error: src refspec master does not match any
+error: failed to push some refs to 'https://github.com/sehyunko/pybo_practice.git'
+
+=> git push -u origin master가 아닌 git push -u origin main으로 변경 (github 리포지토리 페이지 내에서 branch 명이 master인지 main인지 확인)

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'yandex_news',
     'mywordbook',
     'random_reading',
+    'account',
 ]
 
 MIDDLEWARE = [
@@ -127,3 +128,11 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+LOGIN_REDIRECT_URL = 'rueng_home'
+LOGOUT_REDIRECT_URL = 'rueng_home'
+
+AUTH_USER_MODEL = 'auth.User'
+ACCOUNT_SESSION_REMEMBER = True
+SESSION_COOKIE_AGE = 10800

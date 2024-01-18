@@ -1,12 +1,14 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from yandex_news.models import YandexArticletitle, YandexArticlebody, WordCanonical, WordDeclension
+from yandex_news.models import YandexArticletitle, YandexArticlebody, WordCanonical, WordDeclension, UserSavedArticle
 from django.views.decorators.csrf import csrf_exempt
 
 from django.http import JsonResponse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from .models import SavedVocab
+from .models import UserSavedWord
 from django.db import IntegrityError
+from .models import AuthUser
+from django.contrib.auth.decorators import login_required
 
 import json
 import re
@@ -14,25 +16,38 @@ import datetime
 import dictionary_search
 
 @csrf_exempt
+@login_required(redirect_field_name=None)
 def article_detail(request, view_option, article_id):
     if request.method == 'GET':
+        
         article_title_obj = YandexArticletitle.objects.filter(article_id = article_id)[0]
         article_body_obj = YandexArticlebody.objects.filter(article_id = article_id)
-        
+        user_saved_obj = UserSavedArticle.objects.filter(user_id = request.user.id, yandex_article_id = article_title_obj.article_id)
+        user_obj = AuthUser.objects.get(id = request.user.id)
+
         article_title_original = article_title_obj.title 
         article_title_list = article_title_obj.title.split()
         article_body_list = [obj.contents.split() for obj in article_body_obj if obj.contents is not None]
-        is_read = article_title_obj.is_read
+        
+        is_read = 1
+    
+        if not user_saved_obj.exists():
+            is_read = 0
+
 
         ## 다음 페이지로 넘기기 화살표 아이콘
         is_next_page = True
         try:
             if view_option == 'view-all':
                 YandexArticletitle.objects.filter(article_id__gt = article_id).order_by('article_id')[0]
+
             elif view_option == 'not-read-only':
-                YandexArticletitle.objects.filter(article_id__gt = article_id, is_read = 0).order_by('article_id')[0]
+                read_article_obj = UserSavedArticle.objects.filter(user_id = user_obj)
+                read_article_ids = [obj.yandex_article_id.article_id for obj in read_article_obj if obj.yandex_article_id is not None]
+                article_title_obj = YandexArticletitle.objects.exclude(article_id__in = read_article_ids).filter(article_id__gt = article_id).order_by('article_id')[0]
+
             elif view_option == 'read-only':
-                YandexArticletitle.objects.filter(article_id__gt = article_id, is_read = 1).order_by('article_id')[0]
+                article_title_obj = UserSavedArticle.objects.filter(user_id = user_obj, yandex_article_id__gt = article_id).order_by('yandex_article_id')[0]
         except IndexError:
             is_next_page = False
         
@@ -40,32 +55,37 @@ def article_detail(request, view_option, article_id):
         is_previous_page = True
         try:
             if view_option == 'view-all':
-                article_title_obj = YandexArticletitle.objects.filter(article_id__lt = article_id).order_by('-article_id')[0]
+                YandexArticletitle.objects.filter(article_id__lt = article_id).order_by('article_id')[0]
+
             elif view_option == 'not-read-only':
-                article_title_obj = YandexArticletitle.objects.filter(article_id__lt = article_id, is_read = 0).order_by('-article_id')[0]
+                read_article_obj = UserSavedArticle.objects.filter(user_id = user_obj)
+                read_article_ids = [obj.yandex_article_id.article_id for obj in read_article_obj if obj.yandex_article_id is not None]
+                article_title_obj = YandexArticletitle.objects.exclude(article_id__in = read_article_ids).filter(article_id__lt = article_id).order_by('article_id')[0]
+
             elif view_option == 'read-only':
-                article_title_obj = YandexArticletitle.objects.filter(article_id__lt = article_id, is_read = 1).order_by('-article_id')[0]
+                article_title_obj = UserSavedArticle.objects.filter(user_id = user_obj, yandex_article_id__lt = article_id).order_by('yandex_article_id')[0]
         except IndexError:
             is_previous_page = False
-        
+
         context = {'article_title_original': article_title_original,
                    'article_title_list': article_title_list,
                    'article_body_list':article_body_list,
                    'is_read': is_read,
                    'is_next_page': is_next_page,
-                   'is_previous_page': is_previous_page,}
-
+                   'is_previous_page': is_previous_page}
+        
         return render(request, 'yandex_news/article_main.html', context)
     
     elif request.method == 'POST':
 
         request_type = json.loads(request.body).get('request_type')
-
+        
+        ## 단어 검색
         if request_type == 'word_search':
             search_word = json.loads(request.body).get('search_word')
 
             word_obj = WordDeclension.objects.filter(clean_form = search_word)
-
+            
             if word_obj.exists() == False:
                 no_result_dic = [{'pos': 'no_result'}]
                 return JsonResponse(no_result_dic, safe=False)
@@ -73,25 +93,28 @@ def article_detail(request, view_option, article_id):
             canonical_id_list = set([obj.canonical_id for obj in word_obj])
             canonical_id_list = list(canonical_id_list)
 
-            pos_list = []
-
+            canonical_list = []
             for id_ in canonical_id_list:
                 canonical_queryset = WordCanonical.objects.filter(canonical_id = id_)
-                pos_list.extend([q.pos for q in canonical_queryset])
+                canonical_list.extend([(q.canonical_id ,q.pos) for q in canonical_queryset])
 
-            for pos in pos_list:
+            data_list = []
+            for id_, pos in canonical_list:
                 if pos == 'noun':
-                    noun_dic_list = dictionary_search.noun_search(canonical_id_list)
-                    return JsonResponse(noun_dic_list, safe=False)
-                elif pos == 'adj':
-                    adj_dic_list = dictionary_search.adj_search(canonical_id_list)
-                    return JsonResponse(adj_dic_list, safe=False)
+                    noun_dic_list = dictionary_search.noun_search(id_)
+                    data_list.extend(noun_dic_list)
+                elif pos == 'adjective':
+                    adj_dic_list = dictionary_search.adj_search(id_)
+                    data_list.extend(adj_dic_list)
                 elif pos =='verb':
-                    verb_dic_list = dictionary_search.verb_search(canonical_id_list)
-                    return JsonResponse(verb_dic_list, safe=False)
-                else:
-                    pass
+                    verb_dic_list = dictionary_search.verb_search(id_)
+                    data_list.extend(verb_dic_list)
+                elif pos =='etc':
+                    etc_dic_list = dictionary_search.etc_search(id_)
+                    data_list.extend(etc_dic_list)
 
+            return JsonResponse(data_list, safe=False)
+        ## 단어 저장 
         elif request_type == 'word_save':
             save_word = json.loads(request.body).get('save_word')
 
@@ -109,11 +132,13 @@ def article_detail(request, view_option, article_id):
                 saved_date_obj = datetime.datetime.now()
                 saved_date = str(saved_date_obj.year)+'-'+str(saved_date_obj.month)+'-'+str(saved_date_obj.day)
 
-                sw = SavedVocab(
-                    canonical_form = canonical_form,
-                    canonical_id = canonical_id,
-                    saved_date = saved_date,
+                user_id_obj = AuthUser.objects.get(id = request.user.id)
+
+                sw = UserSavedWord(
+                    user_id = user_id_obj,
+                    canonical_id = canonical_id
                 )
+
                 try:
                     sw.save()
                     save_result = 'success'
@@ -122,41 +147,80 @@ def article_detail(request, view_option, article_id):
                     return JsonResponse({'save_result':save_result})      
 
                 return JsonResponse({'save_result':save_result})
-            
+        
+        ## article 저장
         elif (request_type == 'article_save') | (request_type == 'article_unsave'):
-            article_title_obj = YandexArticletitle.objects.get(article_id = article_id)
+            
+            user_id = request.user.id
 
+            user_saved_article_obj = UserSavedArticle()
+            user_obj = AuthUser.objects.get(id = user_id)
+            article_obj = YandexArticletitle.objects.get(article_id = article_id)
+
+            
             if request_type == 'article_save':
-                article_title_obj.is_read = 1
+                
+                user_saved_article_obj.user_id = user_obj
+                user_saved_article_obj.article_type = 'yandex'
+                user_saved_article_obj.yandex_article_id = article_obj
+                user_saved_article_obj.yesasia_article_id = None
+                user_saved_article_obj.save()
+            
             elif request_type == 'article_unsave':
-                article_title_obj.is_read = 0
+                UserSavedArticle.objects.filter(user_id = user_obj, yandex_article_id = article_obj)[0].delete()
+                
+            
+            ## 화면 article 저장 표시 관련 토큰 값 발급
+            article_obj = YandexArticletitle.objects.get(article_id = article_id)
+            save_result = ''
 
-            save_result = 'success'
+            try:            
+                user_saved_article_obj = UserSavedArticle.objects.get(user_id = user_obj, yandex_article_id = article_obj)
+                save_result = 'success'
+            except UserSavedArticle.DoesNotExist:
+                save_result = 'failure'
 
             return JsonResponse({'save_result':save_result})
 
 
+@csrf_exempt
+@login_required(redirect_field_name=None)
 def article_list(request, view_option):
     article_list = ''
     view_option_list = zip(['view-all','not-read-only','read-only',],
                            ['View all','Not read only','Already read only',])
     
+    user_obj = AuthUser.objects.get(id = request.user.id)
+    user_saved_article_obj = UserSavedArticle.objects.filter(user_id = user_obj, article_type='yandex')
+    article_ids = [obj.yandex_article_id.article_id for obj in user_saved_article_obj]
+    read_article_ids = [obj.yandex_article_id.article_id for obj in user_saved_article_obj]
+    is_read_list = []
+
     if view_option == 'view-all':
         article_list = YandexArticletitle.objects.all()
+
     elif view_option == 'not-read-only':
-        article_list = YandexArticletitle.objects.filter(is_read = 0)
+        article_list = YandexArticletitle.objects.exclude(article_id__in = article_ids)
         view_option_list = zip(['not-read-only','view-all','read-only',],
                                ['Not read only','View all','Already read only',])
+        
     elif view_option == 'read-only':
-        article_list = YandexArticletitle.objects.filter(is_read = 1)
+        article_list = YandexArticletitle.objects.filter(article_id__in = article_ids)
         view_option_list = zip(['read-only','view-all','not-read-only',],
                                ['Already read only','View all','Not read only',])
     
     pattern = r'[0-9]{4}\-[0-9]{1,2}\-[0-9]{1,2}'
     update_date_list = [re.match(pattern, c.update_date).group() for c in article_list]
 
-    for new_date, q_obj in zip(update_date_list, article_list):
+    for id_ in [obj.article_id for obj in article_list]:
+        if id_ in read_article_ids:
+            is_read_list.append(1)
+        else:
+            is_read_list.append(0)
+
+    for new_date, q_obj, is_read in zip(update_date_list, article_list, is_read_list):
         q_obj.update_date = new_date
+        q_obj.is_read = is_read
 
     page = request.GET.get('page', '1')
     paginator = Paginator(article_list, 12)
@@ -175,30 +239,46 @@ def article_list(request, view_option):
     return render(request, 'yandex_news/list_main.html', context)
 
 def show_next_article(request, view_option, article_id):
-    article_title_obj = ''
-
+    redirect_article_id = ''
+    user_obj = AuthUser.objects.get(id = request.user.id)
+    
     if view_option == 'view-all':
         article_title_obj = YandexArticletitle.objects.filter(article_id__gt = article_id).order_by('article_id')[0]
-    elif view_option == 'not-read-only':
-        article_title_obj = YandexArticletitle.objects.filter(article_id__gt = article_id, is_read = 0).order_by('article_id')[0]
-    elif view_option == 'read-only':
-        article_title_obj = YandexArticletitle.objects.filter(article_id__gt = article_id, is_read = 1).order_by('article_id')[0]
+        redirect_article_id = article_title_obj.article_id
 
-    redirect_url = "/yandex/yandex_article_list/"+ view_option + '/'+ str(article_title_obj.article_id)
+    elif view_option == 'not-read-only':
+        read_article_obj = UserSavedArticle.objects.filter(user_id = user_obj)
+        read_article_ids = [obj.yandex_article_id for obj in read_article_obj if obj.yandex_article_id is not None]
+        article_title_obj = YandexArticletitle.objects.exclude(article_id__in = read_article_ids).filter(article_id__gt = article_id).order_by('article_id')[0]
+        redirect_article_id = article_title_obj.article_id
+
+    elif view_option == 'read-only':
+        article_title_obj = UserSavedArticle.objects.filter(user_id = user_obj, yandex_article_id__gt = article_id).order_by('yandex_article_id')[0]
+        redirect_article_id = article_title_obj.yandex_article_id.article_id
+
+
+    redirect_url = "/yandex/yandex_article_list/"+ view_option + '/' +str(redirect_article_id)
 
     return JsonResponse({"redirect_url": redirect_url})
 
 def show_previous_article(request, view_option, article_id):
-    article_title_obj = YandexArticletitle.objects.filter(article_id__lt = article_id).order_by('-article_id')[0]
     article_title_obj = ''
+    user_obj = AuthUser.objects.get(id = request.user.id)
 
     if view_option == 'view-all':
         article_title_obj = YandexArticletitle.objects.filter(article_id__lt = article_id).order_by('-article_id')[0]
-    elif view_option == 'not-read-only':
-        article_title_obj = YandexArticletitle.objects.filter(article_id__lt = article_id, is_read = 0).order_by('-article_id')[0]
-    elif view_option == 'read-only':
-        article_title_obj = YandexArticletitle.objects.filter(article_id__lt = article_id, is_read = 1).order_by('-article_id')[0]
+        redirect_article_id = article_title_obj.article_id
 
-    redirect_url = "/yandex/yandex_article_list/"+ view_option + '/'+ str(article_title_obj.article_id)
+    elif view_option == 'not-read-only':
+        read_article_obj = UserSavedArticle.objects.filter(user_id = user_obj)
+        read_article_ids = [obj.yandex_article_id for obj in read_article_obj if obj.yandex_article_id is not None]
+        article_title_obj = YandexArticletitle.objects.exclude(article_id__in = read_article_ids).filter(article_id__lt = article_id).order_by('-article_id')[0]
+        redirect_article_id = article_title_obj.article_id
+
+    elif view_option == 'read-only':
+        article_title_obj = UserSavedArticle.objects.filter(user_id = user_obj, yandex_article_id__lt = article_id).order_by('-yandex_article_id')[0]
+        redirect_article_id = article_title_obj.yandex_article_id.article_id
+
+    redirect_url = "/yandex/yandex_article_list/"+ view_option + '/' + str(redirect_article_id)
 
     return JsonResponse({"redirect_url": redirect_url})

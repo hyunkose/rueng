@@ -9,39 +9,37 @@ def tag_return(declension_list, tag_list):
     
     return word_dic
 
-def noun_search(canonical_id_list):
+def noun_search(id_):
     noun_dic_list = []
 
-    for id_ in canonical_id_list:
-        declension_queryset = WordDeclension.objects.filter(canonical_id = id_)
-        canonical_queryset = WordCanonical.objects.filter(canonical_id = id_)
-        
-        canonical_list = [(q.pos, q.meaning) for q in canonical_queryset]
-        declension_list = [(q.form, q.tags) for q in declension_queryset]
+    declension_queryset = WordDeclension.objects.filter(canonical_id = id_)
+    canonical_queryset = WordCanonical.objects.filter(canonical_id = id_)
+    
+    canonical_list = [(q.pos, q.meaning) for q in canonical_queryset]
+    declension_list = [(q.form, q.tags) for q in declension_queryset]
 
-        tag_list = ['nominative_singular', 'genitive_singular', 'dative_singular',
-                    'accusative_singular', 'instrumental_singular', 'prepositional_singular',
-                    'nominative_plural', 'genitive_plural', 'dative_plural',
-                    'accusative_plural', 'instrumental_plural', 'prepositional_plural']
+    tag_list = ['nominative_singular', 'genitive_singular', 'dative_singular',
+                'accusative_singular', 'instrumental_singular', 'prepositional_singular',
+                'nominative_plural', 'genitive_plural', 'dative_plural',
+                'accusative_plural', 'instrumental_plural', 'prepositional_plural']
 
-        noun_dic = tag_return(declension_list, tag_list)
+    noun_dic = tag_return(declension_list, tag_list)
 
-        noun_dic['meaning'] = canonical_list[0][1]
-        noun_dic['pos'] = canonical_list[0][0]
+    noun_dic['meaning'] = canonical_list[0][1]
+    noun_dic['pos'] = canonical_list[0][0]
 
-        for key in noun_dic:
-            noun_dic[key] = '/'.join(set(noun_dic[key].split('/')))
+    for key in noun_dic:
+        noun_dic[key] = '/'.join(set(noun_dic[key].split('/')))
 
-        noun_dic_list.append(noun_dic)
+    noun_dic_list.append(noun_dic)
 
     return noun_dic_list
 
-def adj_search(canonical_id_list):
+def adj_search(id_):
     adj_dic_list = []
 
-    for id_ in canonical_id_list:
-        declension_queryset = WordDeclension.objects.filter(canonical_id = id_)
-        canonical_queryset = WordCanonical.objects.filter(canonical_id = id_)
+    declension_queryset = WordDeclension.objects.filter(canonical_id = id_)
+    canonical_queryset = WordCanonical.objects.filter(canonical_id = id_)
     
     canonical_list = [(q.pos, q.meaning) for q in canonical_queryset]
     declension_list = [(q.form, q.tags) for q in declension_queryset]
@@ -65,17 +63,16 @@ def adj_search(canonical_id_list):
         adj_dic[key] = '/'.join(set(adj_dic[key].split('/')))
 
     adj_dic_list.append(adj_dic)
-
+    
     return adj_dic_list
 
-def verb_search(canonical_id_list):
+def verb_search(id_):
     verb_dic_list = []
 
-    for id_ in canonical_id_list:
-        declension_queryset = WordDeclension.objects.filter(canonical_id = id_)
-        canonical_queryset = WordCanonical.objects.filter(canonical_id = id_)
+    declension_queryset = WordDeclension.objects.filter(canonical_id = id_)
+    canonical_queryset = WordCanonical.objects.filter(canonical_id = id_)
     
-    canonical_list = [(q.pos, q.meaning,  q.imperfective_perfective) for q in canonical_queryset]
+    canonical_list = [(q.pos, q.meaning,  q.imperfective_perfective, q.canonical_form) for q in canonical_queryset]
     declension_list = [(q.form, q.tags) for q in declension_queryset]
     
     tag_list = ['infinitive',
@@ -89,7 +86,7 @@ def verb_search(canonical_id_list):
                 'plural_present_second-person', 'future_plural_second-person',
                 'plural_present_third-person', 'future_plural_third-person',
                 'imperative_singular','imperative_plural',
-                'masculine_past_singular', 'neuter_past_singular', 'feminine_past_singular', 'masculine_past_plural']
+                'masculine_past_singular', 'neuter_past_singular', 'feminine_past_singular', 'neuter_past_plural']
 
     verb_dic = tag_return(declension_list, tag_list)
 
@@ -103,10 +100,33 @@ def verb_search(canonical_id_list):
         except AttributeError:
             verb_dic[key] = None
             continue
+    
+    verb_dic['infinitive'] = canonical_list[0][3]
 
     verb_dic_list.append(verb_dic)
-
     return verb_dic_list
 
+def etc_search(id_):
+    etc_dic_list = []
+
+    declension_queryset = WordDeclension.objects.filter(canonical_id = id_)
+    canonical_queryset = WordCanonical.objects.filter(canonical_id = id_)
+    
+    canonical_list = [(q.pos, q.meaning) for q in canonical_queryset]
+    declension_list = [(q.form, q.tags) for q in declension_queryset]
+
+    tag_list = ['main_form']
+    
+    etc_dic = tag_return(declension_list, tag_list)
+    
+    etc_dic['meaning'] = canonical_list[0][1]
+    etc_dic['pos'] = canonical_list[0][0]
+
+    for key in etc_dic:
+        etc_dic[key] = '/'.join(set(etc_dic[key].split('/')))
+
+    etc_dic_list.append(etc_dic)
+
+    return etc_dic_list
 
 

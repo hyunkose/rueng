@@ -22,7 +22,14 @@
         <div class="home-content wrapper">
             <h2 class="page-title">Learn Russian by English!</h2>
             <p>Read various articles in Russian with our fast, accurate Russian dictionary app and boost your Russian skills.</p>
+            
+            {% if user.is_authenticated %}
             <a href="random_reading/" class="button">Start</a>
+            {% endif %}
+            {% if not user.is_authenticated %}
+            <a href="{% url 'account:login' %}" class="button">Login</a>
+            {% endif %}
+
         </div>
     </div>
 </body>

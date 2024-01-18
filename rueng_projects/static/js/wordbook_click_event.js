@@ -179,7 +179,7 @@ const declension_html = function (data){
                 `;
             html_raw_list.push(html_raw);
         }
-        else if (pos == 'adj'){
+        else if (pos == 'adjective'){
             let html_raw =`  
                 <div class="close-button-wrapper">
                     <button class="close-button" onclick="close_btn_click_event()"><img src = "../../static/img/x-circle.png"></button>        
@@ -264,6 +264,23 @@ const declension_html = function (data){
             `;
             html_raw_list.push(html_raw);
 
+        }
+        else if(pos == 'etc'){
+            let html_raw = `
+            <p class="original-word">${d['main_form']}</p>
+
+            <p class="word-meaning-title">1. meaning</p>
+            <p class="word-meaning">${d['meaning']}</p>
+
+            <p class="pos-title">2. Part of Speech</p>
+            <p class="pos">${d['pos']}</p>`;
+
+            html_raw_list.push(html_raw);
+        }
+
+        else if(pos == 'no_result'){
+            let html_raw =`<p class="no-result-msg">No result</p>`;
+            html_raw_list.push(html_raw);
         }
 
 
